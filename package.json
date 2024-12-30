@@ -19,9 +19,12 @@
   "dependencies": {
     "@prisma/client": "^6.1.0",
     "axios": "^1.7.9",
+    "chai": "^5.1.2",
+    "chai-http": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "json2csv": "^6.0.0-alpha.2",
+    "mocha": "^11.0.1",
     "node-fetch": "^3.3.2"
   }
 }
