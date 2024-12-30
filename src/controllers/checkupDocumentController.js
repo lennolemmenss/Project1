@@ -1,49 +1,74 @@
-// src/controllers/checkupDocumentController.js
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-// Mock data storage for CheckupDocuments
-let checkupDocuments = [];
-
-exports.createCheckupDocument = (req, res) => {
+exports.createCheckupDocument = async (req, res) => {
   const { checkup_id, file_name, file_path, file_type } = req.body;
-  const newCheckupDocument = {
-    document_id: checkupDocuments.length + 1,
-    checkup_id,
-    file_name,
-    file_path,
-    file_type,
-    upload_date: new Date().toISOString()
-  };
-  checkupDocuments.push(newCheckupDocument);
-  res.status(201).json(newCheckupDocument);
-};
-
-exports.getAllCheckupDocuments = (req, res) => {
-  res.status(200).json(checkupDocuments);
-};
-
-exports.getCheckupDocumentById = (req, res) => {
-  const checkupDocument = checkupDocuments.find(cd => cd.document_id === parseInt(req.params.id));
-  if (!checkupDocument) {
-    return res.status(404).json({ message: "CheckupDocument not found" });
+  try {
+    const newCheckupDocument = await prisma.checkupDocument.create({
+      data: {
+        checkup_id,
+        file_name,
+        file_path,
+        file_type,
+      },
+    });
+    res.status(201).json(newCheckupDocument);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating CheckupDocument' });
   }
-  res.status(200).json(checkupDocument);
 };
 
-exports.updateCheckupDocument = (req, res) => {
+exports.getAllCheckupDocuments = async (req, res) => {
+  try {
+    const checkupDocuments = await prisma.checkupDocument.findMany();
+    res.status(200).json(checkupDocuments);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching CheckupDocuments' });
+  }
+};
+
+exports.getCheckupDocumentById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const checkupDocument = await prisma.checkupDocument.findUnique({
+      where: { document_id: Number(id) },
+    });
+    if (!checkupDocument) {
+      return res.status(404).json({ message: 'CheckupDocument not found' });
+    }
+    res.status(200).json(checkupDocument);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching CheckupDocument' });
+  }
+};
+
+exports.updateCheckupDocument = async (req, res) => {
+  const { id } = req.params;
   const { checkup_id, file_name, file_path, file_type } = req.body;
-  let checkupDocument = checkupDocuments.find(cd => cd.document_id === parseInt(req.params.id));
-  if (!checkupDocument) {
-    return res.status(404).json({ message: "CheckupDocument not found" });
+  try {
+    const updatedCheckupDocument = await prisma.checkupDocument.update({
+      where: { document_id: Number(id) },
+      data: {
+        checkup_id,
+        file_name,
+        file_path,
+        file_type,
+      },
+    });
+    res.status(200).json(updatedCheckupDocument);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating CheckupDocument' });
   }
-  checkupDocument = { ...checkupDocument, checkup_id, file_name, file_path, file_type };
-  res.status(200).json(checkupDocument);
 };
 
-exports.deleteCheckupDocument = (req, res) => {
-  const index = checkupDocuments.findIndex(cd => cd.document_id === parseInt(req.params.id));
-  if (index === -1) {
-    return res.status(404).json({ message: "CheckupDocument not found" });
+exports.deleteCheckupDocument = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.checkupDocument.delete({
+      where: { document_id: Number(id) },
+    });
+    res.status(200).json({ message: 'CheckupDocument deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting CheckupDocument' });
   }
-  checkupDocuments.splice(index, 1);
-  res.status(200).json({ message: "CheckupDocument deleted successfully" });
 };
