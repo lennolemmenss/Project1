@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Patient model
+model Patient {
+  patient_id   Int            @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  date_of_birth DateTime
+  contact_number String?
+  email        String?        @unique
+  address      String?
+
+  medicalRecords MedicalRecord[]
+  checkups       Checkup[]
+  prescriptions  Prescription[]
+}
+
+// Doctor model
+model Doctor {
+  doctor_id     Int            @id @default(autoincrement())
+  first_name    String
+  last_name     String
+  specialization String
+  contact_number String?
+  email         String?        @unique
+
+  checkups       Checkup[]
+  prescriptions  Prescription[]
+}
+
+// MedicalRecord model
+model MedicalRecord {
+  record_id     Int      @id @default(autoincrement())
+  patient_id    Int
+  disease_name  String
+  diagnosis_date DateTime
+  notes         String?
+  status        String?
+
+  patient       Patient  @relation(fields: [patient_id], references: [patient_id])
+}
+
+// Checkup model
+model Checkup {
+  checkup_id    Int      @id @default(autoincrement())
+  patient_id    Int
+  doctor_id     Int
+  checkup_type_id Int
+  checkup_date  DateTime
+  notes         String?
+  status        String?
+
+  patient       Patient   @relation(fields: [patient_id], references: [patient_id])
+  doctor        Doctor    @relation(fields: [doctor_id], references: [doctor_id])
+  checkupType   CheckupType @relation(fields: [checkup_type_id], references: [checkup_type_id])
+  checkupDocuments CheckupDocument[]
+}
+
+// CheckupType model
+model CheckupType {
+  checkup_type_id Int        @id @default(autoincrement())
+  type_name       String
+  description     String?
+
+  checkups        Checkup[]
+}
+
+// CheckupDocument model
+model CheckupDocument {
+  document_id    Int      @id @default(autoincrement())
+  checkup_id     Int
+  file_name      String
+  file_path      String
+  file_type      String
+  upload_date    DateTime @default(now())
+
+  checkup        Checkup  @relation(fields: [checkup_id], references: [checkup_id])
+}
+
+// Prescription model
+model Prescription {
+  prescription_id Int      @id @default(autoincrement())
+  patient_id      Int
+  doctor_id       Int
+  prescribed_date DateTime
+  valid_until     DateTime
+  notes           String?
+
+  patient         Patient  @relation(fields: [patient_id], references: [patient_id])
+  doctor          Doctor   @relation(fields: [doctor_id], references: [doctor_id])
+  prescriptionMedications PrescriptionMedication[]
+}
+
+// Medication model
+model Medication {
+  medication_id  Int        @id @default(autoincrement())
+  name           String
+  description    String?
+  manufacturer   String?
+
+  prescriptionMedications PrescriptionMedication[]
+}
+
+// PrescriptionMedication model (Many-to-many relation)
+model PrescriptionMedication {
+  prescription_id Int
+  medication_id   Int
+  quantity        Int
+  dosage          String
+  frequency       String
+  instructions    String?
+
+  prescription    Prescription @relation(fields: [prescription_id], references: [prescription_id])
+  medication      Medication   @relation(fields: [medication_id], references: [medication_id])
+
+  @@id([prescription_id, medication_id]) // Composite primary key
+}
