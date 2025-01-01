@@ -42,7 +42,7 @@ router.get('/:id/edit', async (req, res) => {
   }
 });
 
-// Show patient details
+/// Show patient details
 router.get('/:id', async (req, res) => {
   try {
     const patientId = parseInt(req.params.id);
@@ -52,6 +52,30 @@ router.get('/:id', async (req, res) => {
 
     const patient = await prisma.patient.findUnique({
       where: { patient_id: patientId },
+      include: {
+        medicalRecords: {
+          orderBy: { diagnosis_date: 'desc' }
+        },
+        prescriptions: {
+          include: {
+            doctor: true,
+            prescriptionMedications: {
+              include: {
+                medication: true
+              }
+            }
+          },
+          orderBy: { prescribed_date: 'desc' }
+        },
+        checkups: {
+          include: {
+            doctor: true,
+            checkupType: true,
+            checkupDocuments: true
+          },
+          orderBy: { checkup_date: 'desc' }
+        }
+      }
     });
 
     if (!patient) {

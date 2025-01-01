@@ -92,8 +92,68 @@ async function main() {
     await prisma.medication.create({ data: medication });
   }
 
+  // Seed Medical Records
+  const medicalRecords = [
+    { patient_id: 1, disease_name: 'Hypertension', diagnosis_date: new Date('2023-01-15'), notes: 'Mild hypertension, prescribed medication', status: 'Under Control' },
+    { patient_id: 2, disease_name: 'Type 2 Diabetes', diagnosis_date: new Date('2023-02-20'), notes: 'Regular monitoring required', status: 'Active' },
+    { patient_id: 3, disease_name: 'Asthma', diagnosis_date: new Date('2023-03-10'), notes: 'Seasonal triggers identified', status: 'Managed' },
+    { patient_id: 4, disease_name: 'Arthritis', diagnosis_date: new Date('2023-04-05'), notes: 'Early stages, physiotherapy recommended', status: 'Active' },
+    { patient_id: 5, disease_name: 'Migraine', diagnosis_date: new Date('2023-05-12'), notes: 'Trigger factors documented', status: 'Under Treatment' },
+    { patient_id: 6, disease_name: 'GERD', diagnosis_date: new Date('2023-06-18'), notes: 'Dietary changes recommended', status: 'Active' },
+    { patient_id: 7, disease_name: 'Allergic Rhinitis', diagnosis_date: new Date('2023-07-22'), notes: 'Seasonal allergies', status: 'Managed' },
+    { patient_id: 8, disease_name: 'Hypothyroidism', diagnosis_date: new Date('2023-08-30'), notes: 'Regular medication started', status: 'Under Control' },
+    { patient_id: 9, disease_name: 'Anxiety Disorder', diagnosis_date: new Date('2023-09-14'), notes: 'Therapy and medication prescribed', status: 'Active' },
+    { patient_id: 10, disease_name: 'Eczema', diagnosis_date: new Date('2023-10-25'), notes: 'Topical treatment prescribed', status: 'Under Treatment' }
+  ];
+
+  for (let record of medicalRecords) {
+    await prisma.medicalRecord.create({ data: record });
+  }
+
+  // Seed Checkup Documents
+  const checkupDocuments = [
+    { checkup_id: 1, file_name: 'blood_test_results.pdf', file_path: '/documents/lab/bt001.pdf', file_type: 'PDF' },
+    { checkup_id: 2, file_name: 'ecg_report.pdf', file_path: '/documents/cardio/ecg002.pdf', file_type: 'PDF' },
+    { checkup_id: 3, file_name: 'skin_analysis.jpg', file_path: '/documents/derm/sa003.jpg', file_type: 'IMAGE' },
+    { checkup_id: 4, file_name: 'mri_scan.dcm', file_path: '/documents/neuro/mri004.dcm', file_type: 'DICOM' },
+    { checkup_id: 5, file_name: 'xray_report.pdf', file_path: '/documents/ortho/xr005.pdf', file_type: 'PDF' },
+    { checkup_id: 6, file_name: 'endoscopy_results.pdf', file_path: '/documents/gastro/end006.pdf', file_type: 'PDF' },
+    { checkup_id: 7, file_name: 'growth_chart.pdf', file_path: '/documents/pedia/gc007.pdf', file_type: 'PDF' },
+    { checkup_id: 8, file_name: 'hormone_panel.pdf', file_path: '/documents/endo/hp008.pdf', file_type: 'PDF' },
+    { checkup_id: 9, file_name: 'eye_scan.jpg', file_path: '/documents/opth/es009.jpg', file_type: 'IMAGE' },
+    { checkup_id: 10, file_name: 'ultrasound.dcm', file_path: '/documents/gyn/us010.dcm', file_type: 'DICOM' }
+  ];
+
+  for (let document of checkupDocuments) {
+    await prisma.checkupDocument.create({ data: document });
+  }
+
+  // Seed Prescriptions
+  const prescriptions = [
+    { patient_id: 1, doctor_id: 1, prescribed_date: new Date('2023-12-01'), valid_until: new Date('2024-03-01'), notes: 'Take with meals' },
+    { patient_id: 2, doctor_id: 2, prescribed_date: new Date('2023-12-05'), valid_until: new Date('2024-03-05'), notes: 'Monitor blood sugar levels' },
+    { patient_id: 3, doctor_id: 3, prescribed_date: new Date('2023-12-10'), valid_until: new Date('2024-03-10'), notes: 'Use as needed' },
+    { patient_id: 4, doctor_id: 4, prescribed_date: new Date('2023-12-12'), valid_until: new Date('2024-03-12'), notes: 'Take before bedtime' },
+    { patient_id: 5, doctor_id: 5, prescribed_date: new Date('2023-12-15'), valid_until: new Date('2024-03-15'), notes: 'Avoid alcohol' }
+  ];
+
+  for (let prescription of prescriptions) {
+    const createdPrescription = await prisma.prescription.create({ data: prescription });
+
+    // Create PrescriptionMedications for each prescription
+    const prescriptionMedications = [
+      { prescription_id: createdPrescription.prescription_id, medication_id: 1, quantity: 30, dosage: '100mg', frequency: 'Once daily', instructions: 'Take with water' },
+      { prescription_id: createdPrescription.prescription_id, medication_id: 2, quantity: 60, dosage: '500mg', frequency: 'Twice daily', instructions: 'Take after meals' }
+    ];
+
+    for (let prescMed of prescriptionMedications) {
+      await prisma.prescriptionMedication.create({ data: prescMed });
+    }
+  }
+
   console.log('Database seeding completed.');
 }
+
 
 main()
   .catch((e) => {
