@@ -4,17 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkups</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
-    
-    <%- include("./partials/navbar") %>
 
+  <%- include("./partials/navbar") %>
 
-    <!-- Page Content -->
-    <div class="container mx-auto mt-10">
-        <h1 class="text-center text-4xl font-semibold">Manage Checkups</h1>
-        <p class="text-center text-gray-600 mt-4">Here you can schedule and view checkups for patients.</p>
-        <!-- Add specific content for checkups management -->
+  <!-- Page Content -->
+  <div class="container mx-auto mt-10">
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-4xl font-semibold text-blue-600">Manage Checkups</h1>
+      <p class="text-gray-600 mt-4">Here you can schedule and view checkups for patients.</p>
     </div>
+
+    <!-- Checkups Section -->
+    <div class="mt-10">
+      <!-- Actions -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-700">Upcoming Checkups</h2>
+        <a href="/checkups/new" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-500">Schedule New Checkup</a>
+      </div>
+
+      <!-- Checkups Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded shadow">
+          <thead>
+            <tr class="bg-gray-200 text-gray-600 text-left">
+              <th class="px-6 py-3 font-medium">Patient Name</th>
+              <th class="px-6 py-3 font-medium">Date</th>
+              <th class="px-6 py-3 font-medium">Doctor</th>
+              <th class="px-6 py-3 font-medium">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Example row -->
+            <tr class="border-t">
+              <td class="px-6 py-4">John Doe</td>
+              <td class="px-6 py-4">2024-01-05</td>
+              <td class="px-6 py-4">Dr. Smith</td>
+              <td class="px-6 py-4">
+                <a href="/checkups/1/view" class="text-blue-500 hover:underline">View</a>
+                <a href="/checkups/1/edit" class="text-yellow-500 hover:underline ml-4">Edit</a>
+                <a href="/checkups/1/delete" class="text-red-500 hover:underline ml-4">Delete</a>
+              </td>
+            </tr>
+            <!-- Repeat rows dynamically with data -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
