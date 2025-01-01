@@ -4,6 +4,7 @@ const cors = require('cors');
 const methodOverride = require('method-override');
 const templateRoutes = require('./routes/templates');
 const patientRoutes = require('./routes/patientRoutes');
+const medicalRecordRoutes = require('./routes/medicalRecordRoutes');
 
 const app = express();
 const port = 3000;
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Mount routes
 app.use('/patients', patientRoutes);  // All patient routes will be prefixed with /patients
+app.use(medicalRecordRoutes);
 app.use('/', templateRoutes);         // Other template routes
 
 app.listen(port, () => {

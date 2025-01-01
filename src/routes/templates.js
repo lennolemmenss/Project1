@@ -54,6 +54,7 @@ router.get('/patients/new', (req, res) => {
   res.render('create-edit-patient', { patient: null }); // Pass patient as null
 });
 
+
 // Checkups
 router.get('/checkups', (req, res) => {
   res.render('checkups');
