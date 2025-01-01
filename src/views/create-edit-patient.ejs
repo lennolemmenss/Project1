@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= patient ? 'Edit Patient' : 'Create New Patient' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- Include Navbar -->
+  <%- include("./partials/navbar") %>
+
+  <!-- Page Content -->
+  <div class="container mx-auto mt-10">
+    <!-- Title Section -->
+    <div class="text-center">
+      <h1 class="text-4xl font-semibold text-blue-600"><%= patient ? 'Edit Patient' : 'Create New Patient' %></h1>
+      <p class="text-gray-600 mt-4"><%= patient ? 'Update patient details' : 'Fill in the form to add a new patient' %>.</p>
+    </div>
+
+    <!-- Form Section -->
+    <div class="mt-8 bg-white shadow-md rounded p-8">
+      <form action="<%= patient ? `/patients/${patient.patient_id}?_method=PUT` : '/patients' %>" method="POST">
+        <!-- First Name -->
+        <div class="mb-4">
+          <label for="first_name" class="block text-gray-700 font-medium">First Name</label>
+          <input type="text" id="first_name" name="first_name" required
+            value="<%= patient ? patient.first_name : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-4">
+          <label for="last_name" class="block text-gray-700 font-medium">Last Name</label>
+          <input type="text" id="last_name" name="last_name" required
+            value="<%= patient ? patient.last_name : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-medium">Email</label>
+          <input type="email" id="email" name="email" required
+            value="<%= patient ? patient.email : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Phone Number -->
+        <div class="mb-4">
+          <label for="contact_number" class="block text-gray-700 font-medium">Phone Number</label>
+          <input type="text" id="contact_number" name="contact_number" required
+            value="<%= patient ? patient.contact_number : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="mb-4">
+          <label for="date_of_birth" class="block text-gray-700 font-medium">Date of Birth</label>
+          <input type="date" id="date_of_birth" name="date_of_birth" required
+            value="<%= patient && patient.date_of_birth ? patient.date_of_birth.toISOString().split('T')[0] : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Address -->
+        <div class="mb-4">
+          <label for="address" class="block text-gray-700 font-medium">Address</label>
+          <textarea id="address" name="address" rows="3" required
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"><%= patient ? patient.address : '' %></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-500">
+            <%= patient ? 'Update Patient' : 'Create Patient' %>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>
