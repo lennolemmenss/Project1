@@ -77,6 +77,25 @@
             <%= patient ? 'Update Patient' : 'Create Patient' %>
           </button>
         </div>
+
+        <!-- Condition Status -->
+        <div class="mb-4">
+          <label for="condition_status" class="block text-gray-700 font-medium">Condition Status</label>
+          <select 
+            id="condition_status" 
+            name="condition_status" 
+            required
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            <option value="" disabled <%= !patient ? 'selected' : '' %>>Select a status</option>
+            <option value="active" <%= patient && patient.condition_status === 'active' ? 'selected' : '' %>>Active</option>
+            <option value="resolved" <%= patient && patient.condition_status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+            <option value="pending" <%= patient && patient.condition_status === 'pending' ? 'selected' : '' %>>Pending</option>
+          </select>
+        </div>
+
+
+
       </form>
     </div>
   </div>

@@ -16,6 +16,7 @@ model Patient {
   contact_number String?
   email          String?         @unique
   address        String?
+  condition_status String? 
   checkups       Checkup[]
   medicalRecords MedicalRecord[]
   prescriptions  Prescription[]
