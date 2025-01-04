@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Routes created 
+
 model Patient {
   patient_id     Int             @id @default(autoincrement())
   first_name     String
@@ -22,7 +22,7 @@ model Patient {
   prescriptions  Prescription[]
 }
 
-// Routes created 
+
 model Doctor {
   doctor_id      Int            @id @default(autoincrement())
   first_name     String
@@ -34,7 +34,7 @@ model Doctor {
   prescriptions  Prescription[]
 }
 
-// Routes created 
+
 model MedicalRecord {
   record_id      Int      @id @default(autoincrement())
   patient_id     Int
@@ -45,7 +45,7 @@ model MedicalRecord {
   patient        Patient  @relation(fields: [patient_id], references: [patient_id])
 }
 
-// Routes created 
+
 model Checkup {
   checkup_id       Int               @id @default(autoincrement())
   patient_id       Int
@@ -60,7 +60,7 @@ model Checkup {
   checkupDocuments CheckupDocument[]
 }
 
-// Routes created
+
 model CheckupType {
   checkup_type_id Int       @id @default(autoincrement())
   type_name       String
@@ -68,7 +68,7 @@ model CheckupType {
   checkups        Checkup[]
 }
 
-// Routes created
+
 model CheckupDocument {
   document_id Int      @id @default(autoincrement())
   checkup_id  Int
@@ -79,7 +79,7 @@ model CheckupDocument {
   checkup     Checkup  @relation(fields: [checkup_id], references: [checkup_id])
 }
 
-// Routes created
+
 model Prescription {
   prescription_id         Int                      @id @default(autoincrement())
   patient_id              Int
@@ -92,7 +92,7 @@ model Prescription {
   prescriptionMedications PrescriptionMedication[]
 }
 
-// Routes created
+
 model Medication {
   medication_id           Int                      @id @default(autoincrement())
   name                    String
@@ -101,7 +101,7 @@ model Medication {
   prescriptionMedications PrescriptionMedication[]
 }
 
-// Routes created
+
 model PrescriptionMedication {
   prescription_id Int
   medication_id   Int

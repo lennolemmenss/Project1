@@ -49,6 +49,7 @@ router.post('/patients/:patientId/medical-records', async (req, res) => {
   }
 });
 
+
 // Display form to edit an existing medical record
 router.get('/medical-records/:recordId/edit', async (req, res) => {
     const { recordId } = req.params;

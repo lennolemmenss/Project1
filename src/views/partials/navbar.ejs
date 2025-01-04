@@ -4,14 +4,26 @@
     <div class="text-2xl font-extrabold tracking-wide">
       <a href="/dashboard" class="hover:text-gray-200 transition duration-200 ease-in-out">HealthCareApp</a>
     </div>
-    
+
+    <!-- Hamburger Menu -->
+    <div class="block lg:hidden">
+      <button id="menu-button" class="focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+
     <!-- Navigation Links -->
-    <ul class="flex space-x-6 text-lg">
+    <ul id="nav-links" class="hidden lg:flex space-x-6 text-lg">
       <li>
         <a href="/dashboard" class="hover:text-gray-200 transition duration-200 ease-in-out">Dashboard</a>
       </li>
       <li>
         <a href="/patients" class="hover:text-gray-200 transition duration-200 ease-in-out">Patients</a>
+      </li>
+      <li>
+        <a href="/medication" class="hover:text-gray-200 transition duration-200 ease-in-out">Medication</a>
       </li>
       <li>
         <a href="/checkups" class="hover:text-gray-200 transition duration-200 ease-in-out">Checkups</a>
@@ -23,10 +35,35 @@
         <a href="/login" class="hover:text-gray-200 transition duration-200 ease-in-out">Login</a>
       </li>
     </ul>
-    
+
     <!-- Logout Button -->
-    <button class="bg-gray-800 px-4 py-2 rounded-lg text-white hover:bg-gray-700 transition duration-200 ease-in-out">
+    <button class="bg-gray-800 px-4 py-2 rounded-lg text-white hover:bg-gray-700 transition duration-200 ease-in-out hidden lg:block">
       Logout
     </button>
   </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="lg:hidden">
+    <ul class="flex flex-col space-y-2 mt-2 text-lg bg-blue-600 px-4 py-2 rounded-lg shadow-md">
+      <li><a href="/dashboard" class="block hover:text-gray-200 transition duration-200 ease-in-out">Dashboard</a></li>
+      <li><a href="/patients" class="block hover:text-gray-200 transition duration-200 ease-in-out">Patients</a></li>
+      <li><a href="/medication" class="block hover:text-gray-200 transition duration-200 ease-in-out">Medication</a></li>
+      <li><a href="/checkups" class="block hover:text-gray-200 transition duration-200 ease-in-out">Checkups</a></li>
+      <li><a href="/export" class="block hover:text-gray-200 transition duration-200 ease-in-out">Export Data</a></li>
+      <li><a href="/login" class="block hover:text-gray-200 transition duration-200 ease-in-out">Login</a></li>
+      <li><button class="bg-gray-800 w-full px-4 py-2 rounded-lg text-white hover:bg-gray-700 transition duration-200 ease-in-out">Logout</button></li>
+    </ul>
+  </div>
+
+  <!-- Script to toggle mobile menu -->
+  <script>
+    const menuButton = document.getElementById('menu-button');
+    const navLinks = document.getElementById('nav-links');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+
 </nav>

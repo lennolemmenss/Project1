@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= medication ? 'Edit Medication' : 'Create New Medication' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- Include Navbar -->
+  <%- include("./partials/navbar") %>
+
+  <!-- Page Content -->
+  <div class="container mx-auto mt-10">
+    
+    <!-- Title Section -->
+    <div class="text-center">
+      <h1 class="text-4xl font-semibold text-blue-600"><%= medication ? 'Edit Medication' : 'Create New Medication' %></h1>
+      <p class="text-gray-600 mt-4"><%= medication ? 'Update medication details' : 'Fill in the form to add a new medication' %>.</p>
+    </div>
+
+    <!-- Form Section -->
+    <div class="mt-8 bg-white shadow-md rounded p-8">
+      <form action="<%= medication ? `/medication/${medication.medication_id}?_method=PUT` : '/medication' %>" method="POST">
+        
+        <!-- Name -->
+        <div class="mb-4">
+          <label for="name" class="block text-gray-700 font-medium">Name</label>
+          <input type="text" id="name" name="name" required 
+            value="<%= medication ? medication.name : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Description -->
+        <div class="mb-4">
+          <label for="description" class="block text-gray-700 font-medium">Description</label>
+          <textarea id="description" name="description"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"><%= medication ? medication.description : '' %></textarea>
+        </div>
+
+        <!-- Manufacturer -->
+        <div class="mb-4">
+          <label for="manufacturer" class="block text-gray-700 font-medium">Manufacturer</label>
+          <input type="text" id="manufacturer" name="manufacturer"
+            value="<%= medication ? medication.manufacturer : '' %>"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-500">
+            <%= medication ? 'Update Medication' : 'Create Medication' %>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>
