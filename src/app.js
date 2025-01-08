@@ -7,6 +7,9 @@ const patientRoutes = require('./routes/patientRoutes');
 const medicalRecordRoutes = require('./routes/medicalRecordRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
 const medicationRoutes = require('./routes/medicationRoutes'); // Adjust path as necessary
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const checkupRoutes = require('./routes/checkupRoutes');
+const checkupDocumentRoutes = require('./routes/checkupDocumentRoutes');
 
 
 const app = express();
@@ -26,9 +29,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Mount routes
 app.use('/patients', patientRoutes);
 app.use('/medication', medicationRoutes);
+app.use('/checkups', checkupRoutes);
+app.use('/checkups', checkupDocumentRoutes);
+
+app.use('/', dashboardRoutes);
 app.use('/' ,medicalRecordRoutes);
 app.use('/', prescriptionRoutes)
-app.use('/', templateRoutes);         // Other template routes
+app.use('/', templateRoutes);   
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

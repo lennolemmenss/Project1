@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= checkup ? 'Edit Checkup' : 'Create New Checkup' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- Include Navbar -->
+  <%- include("./partials/navbar") %>
+
+  <!-- Page Content -->
+  <div class="container mx-auto mt-10">
+    
+    <!-- Title Section -->
+    <div class="text-center">
+      <h1 class="text-4xl font-semibold text-blue-600"><%= checkup ? 'Edit Checkup' : 'Create New Checkup' %></h1>
+      <p class="text-gray-600 mt-4"><%= checkup ? 'Update checkup details' : 'Fill in the form to add a new checkup' %>.</p>
+    </div>
+
+    <!-- Form Section -->
+    <div class="mt-8 bg-white shadow-md rounded p-8">
+      <form action="<%= checkup ? `/checkups/${checkup.checkup_id}?_method=PUT` : '/checkups' %>" method="POST">
+        
+        <!-- Patient -->
+        <div class="mb-4">
+          <label for="patient_id" class="block text-gray-700 font-medium">Patient</label>
+          <select id="patient_id" name="patient_id" required class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+            <% patients.forEach(patient => { %>
+              <option value="<%= patient.patient_id %>" <%= checkup && checkup.patient_id === patient.patient_id ? 'selected' : '' %>><%= patient.first_name %> <%= patient.last_name %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <!-- Doctor -->
+        <div class="mb-4">
+          <label for="doctor_id" class="block text-gray-700 font-medium">Doctor</label>
+          <select id="doctor_id" name="doctor_id" required class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+            <% doctors.forEach(doctor => { %>
+              <option value="<%= doctor.doctor_id %>" <%= checkup && checkup.doctor_id === doctor.doctor_id ? 'selected' : '' %>><%= doctor.first_name %> <%= doctor.last_name %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <!-- Checkup Type -->
+        <div class="mb-4">
+          <label for="checkup_type_id" class="block text-gray-700 font-medium">Checkup Type</label>
+          <select id="checkup_type_id" name="checkup_type_id" required class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+            <% checkupTypes.forEach(type => { %>
+              <option value="<%= type.checkup_type_id %>" <%= checkup && checkup.checkup_type_id === type.checkup_type_id ? 'selected' : '' %>><%= type.type_name %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <!-- Checkup Date -->
+        <div class="mb-4">
+          <label for="checkup_date" class="block text-gray-700 font-medium">Checkup Date</label>
+          <input
+            type="date"
+            id="checkup_date"
+            name="checkup_date"
+            required
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            value="<%= checkup ? checkup.checkup_date.toISOString().split('T')[0] : '' %>"
+          />
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-4">
+          <label for="notes" class="block text-gray-700 font-medium">Notes</label>
+          <textarea
+            id="notes"
+            name="notes"
+            rows="4"
+            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+          ><%= checkup ? checkup.notes : '' %></textarea>
+        </div>
+
+        <!-- Status -->
+        <div class="mb-4">
+          <label for="status" class="block text-gray-700 font-medium">Status</label>
+          <select id="status" name="status" class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
+            <option value="Scheduled" <%= checkup && checkup.status === 'Scheduled' ? 'selected' : '' %>>Scheduled</option>
+            <option value="Completed" <%= checkup && checkup.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+            <option value="Canceled" <%= checkup && checkup.status === 'Canceled' ? 'selected' : '' %>>Canceled</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6 text-center">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-6 py-2 rounded shadow-md hover:bg-blue-500 transition"
+          >
+            <%= checkup ? 'Update Checkup' : 'Create Checkup' %>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>

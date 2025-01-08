@@ -1,60 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkups</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 font-sans">
 
+  <!-- Include Navbar -->
   <%- include("./partials/navbar") %>
 
   <!-- Page Content -->
-  <div class="container mx-auto mt-10">
-    <!-- Header -->
-    <div class="text-center">
-      <h1 class="text-4xl font-semibold text-blue-600">Manage Checkups</h1>
-      <p class="text-gray-600 mt-4">Here you can schedule and view checkups for patients.</p>
+  <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+
+    <!-- Title Section -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-semibold text-blue-600">Checkup Management</h1>
+      <p class="text-gray-600 mt-2">Manage all checkups here.</p>
     </div>
 
-    <!-- Checkups Section -->
-    <div class="mt-10">
-      <!-- Actions -->
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-semibold text-gray-700">Upcoming Checkups</h2>
-        <a href="/checkups/new" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-500">Schedule New Checkup</a>
+    <!-- Search/Filter Bar -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+      <!-- Search Input -->
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Search by patient name"
+        class="w-full mb-2 sm:mb-0 sm:w-1/2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+        oninput="filterCheckups()"
+      />
+
+      <!-- Filter Dropdown -->
+      <select
+        id="filter"
+        name="filter"
+        class="w-full sm:w-auto px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300 sm:ml-4"
+        onchange="filterCheckups()"
+      >
+        <option value="all">All Checkups</option>
+        <!-- Add additional filters as needed -->
+      </select>
+    </div>
+
+    <!-- Checkup Management Section -->
+    <div class="mt-8">
+      <!-- Add Checkup Button -->
+      <div class="flex justify-end mb-6">
+        <a href="/checkups/new" class="bg-blue-600 text-white w-full sm:w-auto px-4 py-2 rounded-lg shadow-md hover:bg-blue-500 transition">
+          + Add New Checkup
+        </a>
       </div>
 
-      <!-- Checkups Table -->
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-white rounded shadow">
+      <!-- Checkup List -->
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <table id="checkupTable" class="min-w-full table-auto border-collapse border border-gray-300">
           <thead>
-            <tr class="bg-gray-200 text-gray-600 text-left">
-              <th class="px-6 py-3 font-medium">Patient Name</th>
-              <th class="px-6 py-3 font-medium">Date</th>
-              <th class="px-6 py-3 font-medium">Doctor</th>
-              <th class="px-6 py-3 font-medium">Actions</th>
+            <tr class="bg-blue-600 text-white">
+              <th class="px-2 py-3 text-left border-b border-gray-300">Checkup ID</th>
+              <th class="px-2 py-3 text-left border-b border-gray-300">Patient</th>
+              <th class="px-2 py-3 text-left border-b border-gray-300">Doctor</th>
+              <th class="px-2 py-3 text-left border-b border-gray-300">Checkup Type</th>
+              <th class="px-2 py-3 text-left border-b border-gray-300">Date</th>
+              <th class="px-2 py-3 text-left border-b border-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Example row -->
-            <tr class="border-t">
-              <td class="px-6 py-4">John Doe</td>
-              <td class="px-6 py-4">2024-01-05</td>
-              <td class="px-6 py-4">Dr. Smith</td>
-              <td class="px-6 py-4">
-                <a href="/checkups/1/view" class="text-blue-500 hover:underline">View</a>
-                <a href="/checkups/1/edit" class="text-yellow-500 hover:underline ml-4">Edit</a>
-                <a href="/checkups/1/delete" class="text-red-500 hover:underline ml-4">Delete</a>
-              </td>
-            </tr>
-            <!-- Repeat rows dynamically with data -->
+          <tbody id="checkupTableBody">
+            <% if (checkups && checkups.length > 0) { %>
+              <% checkups.forEach(function(checkup) { %>
+                <tr class="border-t border-gray-300 hover:bg-gray-100">
+                  <td class="px-2 py-3 text-gray-700"><%= checkup.checkup_id %></td>
+                  <td class="px-2 py-3 text-gray-700"><%= checkup.patient.first_name %> <%= checkup.patient.last_name %></td>
+                  <td class="px-2 py-3 text-gray-700"><%= checkup.doctor.first_name %> <%= checkup.doctor.last_name %></td>
+                  <td class="px-2 py-3 text-gray-700"><%= checkup.checkupType.type_name %></td>
+                  <td class="px-2 py-3 text-gray-700"><%= new Date(checkup.checkup_date).toLocaleDateString() %></td>
+                  <td class="px-2 py-3">
+                    <a href="/checkups/<%= checkup.checkup_id %>/details" class="text-blue-600 hover:underline">View Details</a> | 
+                    <a href="/checkups/<%= checkup.checkup_id %>/edit" class="text-blue-600 hover:underline">Edit</a> |
+                    <form action="/checkups/<%= checkup.checkup_id %>?_method=DELETE" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this checkup?');">
+                      <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="text-center py-4 text-gray-500">No checkups available.</td>
+              </tr>
+            <% } %>
           </tbody>
+          
         </table>
       </div>
     </div>
   </div>
 
+  <script>
+    function filterCheckups() {
+      const searchValue = document.getElementById("search").value.toLowerCase();
+      const tableBody = document.getElementById("checkupTableBody");
+      const rows = tableBody.querySelectorAll("tr");
+
+      rows.forEach(row => {
+        const patientName = row.cells[1].textContent.toLowerCase(); // Accessing the patient name column
+
+        // Apply search logic
+        if (patientName.includes(searchValue)) {
+          row.style.display = ""; // Show row
+        } else {
+          row.style.display = "none"; // Hide row
+        }
+      });
+    }
+  </script>
+
 </body>
+
 </html>
