@@ -1,10 +1,11 @@
+<!-- In create-edit-checkups.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= checkup ? 'Edit Checkup' : 'Create New Checkup' %></title>
+  <title><%= checkup ? 'Edit' : 'Create' %> Checkup</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -14,96 +15,96 @@
   <%- include("./partials/navbar") %>
 
   <!-- Page Content -->
-  <div class="container mx-auto mt-10">
-    
+  <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+
     <!-- Title Section -->
-    <div class="text-center">
-      <h1 class="text-4xl font-semibold text-blue-600"><%= checkup ? 'Edit Checkup' : 'Create New Checkup' %></h1>
-      <p class="text-gray-600 mt-4"><%= checkup ? 'Update checkup details' : 'Fill in the form to add a new checkup' %>.</p>
+    <div class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-semibold text-blue-600"><%= checkup ? 'Edit' : 'Create' %> Checkup</h1>
     </div>
 
-    <!-- Form Section -->
-    <div class="mt-8 bg-white shadow-md rounded p-8">
-      <form action="<%= checkup ? `/checkups/${checkup.checkup_id}?_method=PUT` : '/checkups' %>" method="POST">
-        
-        <!-- Patient -->
+    <!-- Checkup Form Section -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6">
+      <form action="<%= checkup ? '/checkups/' + checkup.checkup_id : '/checkups' %>" method="POST" enctype="multipart/form-data">
+        <% if (checkup) { %>
+          <input type="hidden" name="_method" value="PUT" />
+        <% } %>
         <div class="mb-4">
-          <label for="patient_id" class="block text-gray-700 font-medium">Patient</label>
-          <select id="patient_id" name="patient_id" required class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
-            <% patients.forEach(patient => { %>
-              <option value="<%= patient.patient_id %>" <%= checkup && checkup.patient_id === patient.patient_id ? 'selected' : '' %>><%= patient.first_name %> <%= patient.last_name %></option>
+          <label for="patient_id" class="block text-sm font-medium text-gray-700">Patient</label>
+          <select name="patient_id" id="patient_id" class="block w-full mt-1">
+            <% patients.forEach(function(patient) { %>
+              <option value="<%= patient.patient_id %>" <%= checkup && checkup.patient.patient_id === patient.patient_id ? 'selected' : '' %>><%= patient.first_name %> <%= patient.last_name %></option>
             <% }); %>
           </select>
         </div>
 
-        <!-- Doctor -->
         <div class="mb-4">
-          <label for="doctor_id" class="block text-gray-700 font-medium">Doctor</label>
-          <select id="doctor_id" name="doctor_id" required class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
-            <% doctors.forEach(doctor => { %>
-              <option value="<%= doctor.doctor_id %>" <%= checkup && checkup.doctor_id === doctor.doctor_id ? 'selected' : '' %>><%= doctor.first_name %> <%= doctor.last_name %></option>
+          <label for="doctor_id" class="block text-sm font-medium text-gray-700">Doctor</label>
+          <select name="doctor_id" id="doctor_id" class="block w-full mt-1">
+            <% doctors.forEach(function(doctor) { %>
+              <option value="<%= doctor.doctor_id %>" <%= checkup && checkup.doctor.doctor_id === doctor.doctor_id ? 'selected' : '' %>><%= doctor.first_name %> <%= doctor.last_name %></option>
             <% }); %>
           </select>
         </div>
 
-        <!-- Checkup Type -->
         <div class="mb-4">
-          <label for="checkup_type_id" class="block text-gray-700 font-medium">Checkup Type</label>
-          <select id="checkup_type_id" name="checkup_type_id" required class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
-            <% checkupTypes.forEach(type => { %>
-              <option value="<%= type.checkup_type_id %>" <%= checkup && checkup.checkup_type_id === type.checkup_type_id ? 'selected' : '' %>><%= type.type_name %></option>
+          <label for="checkup_type_id" class="block text-sm font-medium text-gray-700">Checkup Type</label>
+          <select name="checkup_type_id" id="checkup_type_id" class="block w-full mt-1">
+            <% checkupTypes.forEach(function(checkupType) { %>
+              <option value="<%= checkupType.checkup_type_id %>" <%= checkup && checkup.checkupType.checkup_type_id === checkupType.checkup_type_id ? 'selected' : '' %>><%= checkupType.type_name %></option>
             <% }); %>
           </select>
         </div>
 
-        <!-- Checkup Date -->
         <div class="mb-4">
-          <label for="checkup_date" class="block text-gray-700 font-medium">Checkup Date</label>
-          <input
-            type="date"
-            id="checkup_date"
-            name="checkup_date"
-            required
-            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
-            value="<%= checkup ? checkup.checkup_date.toISOString().split('T')[0] : '' %>"
-          />
+          <label for="checkup_date" class="block text-sm font-medium text-gray-700">Checkup Date</label>
+          <input type="date" name="checkup_date" id="checkup_date" class="block w-full mt-1" value="<%= checkup && checkup.checkup_date ? checkup.checkup_date.toISOString().slice(0, 10) : '' %>" required />
         </div>
 
-        <!-- Notes -->
         <div class="mb-4">
-          <label for="notes" class="block text-gray-700 font-medium">Notes</label>
-          <textarea
-            id="notes"
-            name="notes"
-            rows="4"
-            class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
-          ><%= checkup ? checkup.notes : '' %></textarea>
+          <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+          <textarea name="notes" id="notes" class="block w-full mt-1" rows="4"><%= checkup ? checkup.notes : '' %></textarea>
         </div>
 
-        <!-- Status -->
         <div class="mb-4">
-          <label for="status" class="block text-gray-700 font-medium">Status</label>
-          <select id="status" name="status" class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300">
-            <option value="Scheduled" <%= checkup && checkup.status === 'Scheduled' ? 'selected' : '' %>>Scheduled</option>
-            <option value="Completed" <%= checkup && checkup.status === 'Completed' ? 'selected' : '' %>>Completed</option>
-            <option value="Canceled" <%= checkup && checkup.status === 'Canceled' ? 'selected' : '' %>>Canceled</option>
+          <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+          <select name="status" id="status" class="block w-full mt-1">
+            <option value="completed" <%= checkup && checkup.status === 'completed' ? 'selected' : '' %>>Completed</option>
+            <option value="pending" <%= checkup && checkup.status === 'pending' ? 'selected' : '' %>>Pending</option>
           </select>
         </div>
 
-        <!-- Submit Button -->
-        <div class="mt-6 text-center">
-          <button
-            type="submit"
-            class="bg-blue-600 text-white px-6 py-2 rounded shadow-md hover:bg-blue-500 transition"
-          >
+        <!-- File Upload Section for Checkup Document -->
+        <div class="mb-4">
+          <label for="document" class="block text-sm font-medium text-gray-700">Upload Document</label>
+          <input type="file" name="document" id="document" class="block w-full mt-1" />
+
+          <!-- Display Existing Documents -->
+          <% if (checkupDocuments && checkupDocuments.length > 0) { %>
+            <div class="mt-2">
+              <h3 class="text-lg font-semibold">Existing Document:</h3>
+              <ul>
+                <% checkupDocuments.forEach(function(doc) { %>
+                  <li>
+                    <a href="<%= doc.file_path %>" class="text-blue-600 hover:underline" target="_blank">
+                      <%= doc.file_name %>
+                    </a>
+                  </li>
+                <% }); %>
+              </ul>
+              <p class="text-sm text-gray-600 mt-2">Upload a new document to replace the existing one.</p>
+            </div>
+          <% } %>
+        </div>
+
+
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-500 transition">
             <%= checkup ? 'Update Checkup' : 'Create Checkup' %>
           </button>
         </div>
-
       </form>
     </div>
   </div>
-
 </body>
 
 </html>

@@ -164,56 +164,6 @@
         </div>
       </div>
 
-      <!-- Checkups Card -->
-      <div class="bg-white shadow-lg rounded-lg p-8">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-semibold text-gray-800">Checkups</h2>
-          <a href="/patients/<%= patient.patient_id %>/checkups/new" 
-             class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500">
-            Schedule Checkup
-          </a>
-        </div>
-
-        <div class="space-y-6">
-          <% patient.checkups.forEach(checkup => { %>
-            <div class="border rounded-lg p-4">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h3 class="font-semibold"><%= checkup.checkupType.type_name %></h3>
-                  <p class="text-sm text-gray-600">
-                    Dr. <%= checkup.doctor.first_name %> <%= checkup.doctor.last_name %> - 
-                    <%= new Date(checkup.checkup_date).toLocaleDateString() %>
-                  </p>
-                  <% if (checkup.notes) { %>
-                    <p class="mt-2 text-gray-700"><%= checkup.notes %></p>
-                  <% } %>
-                </div>
-                <div class="flex space-x-4">
-                  <a href="/checkups/<%= checkup.checkup_id %>" class="text-blue-600 hover:text-blue-900">View Details</a>
-                  <a href="/checkups/<%= checkup.checkup_id %>/edit" class="text-blue-600 hover:text-blue-900">Edit</a>
-                </div>
-              </div>
-
-              <% if (checkup.checkupDocuments.length > 0) { %>
-                <div class="mt-4">
-                  <h4 class="font-medium mb-2">Documents</h4>
-                  <div class="space-y-2">
-                    <% checkup.checkupDocuments.forEach(doc => { %>
-                      <div class="flex items-center text-sm">
-                        <a href="<%= doc.file_path %>" class="text-blue-600 hover:text-blue-900">
-                          <%= doc.file_name %>
-                        </a>
-                        <span class="text-gray-500 ml-2">(<%= doc.file_type %>)</span>
-                      </div>
-                    <% }) %>
-                  </div>
-                </div>
-              <% } %>
-            </div>
-          <% }) %>
-        </div>
-      </div>
-
     </div>
   </div>
 

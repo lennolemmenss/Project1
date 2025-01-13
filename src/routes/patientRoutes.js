@@ -166,7 +166,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete patient
 router.delete('/:id', async (req, res) => {
   try {
     const patientId = parseInt(req.params.id);
@@ -174,9 +173,82 @@ router.delete('/:id', async (req, res) => {
       return res.status(400).send('Invalid patient ID');
     }
 
-    await prisma.patient.delete({
-      where: { patient_id: patientId },
-    });
+    // First try to delete just the patient
+    try {
+      await prisma.patient.delete({
+        where: { patient_id: patientId },
+      });
+      return res.redirect('/patients');
+    } catch (deleteError) {
+      // If there's a foreign key constraint error
+      if (deleteError.code === 'P2003') {
+        // Check if force delete was requested
+        if (req.query.force === 'true') {
+          // Perform cascading delete using a transaction
+          await prisma.$transaction(async (tx) => {
+            // Delete related checkup documents first
+            await tx.checkupDocument.deleteMany({
+              where: {
+                checkup: {
+                  patient_id: patientId
+                }
+              }
+            });
+
+            // Delete checkups
+            await tx.checkup.deleteMany({
+              where: { patient_id: patientId }
+            });
+
+            // Delete prescription medications
+            await tx.prescriptionMedication.deleteMany({
+              where: {
+                prescription: {
+                  patient_id: patientId
+                }
+              }
+            });
+
+            // Delete prescriptions
+            await tx.prescription.deleteMany({
+              where: { patient_id: patientId }
+            });
+
+            // Delete medical records
+            await tx.medicalRecord.deleteMany({
+              where: { patient_id: patientId }
+            });
+
+            // Finally delete the patient
+            await tx.patient.delete({
+              where: { patient_id: patientId }
+            });
+          });
+
+          return res.redirect('/patients');
+        } else {
+          // If not force delete, render confirmation page
+          const patient = await prisma.patient.findUnique({
+            where: { patient_id: patientId },
+            include: {
+              _count: {
+                select: {
+                  checkups: true,
+                  medicalRecords: true,
+                  prescriptions: true
+                }
+              }
+            }
+          });
+
+          return res.render('confirm-delete-patient', { 
+            patient,
+            relatedRecords: patient._count
+          });
+        }
+      }
+    }
+
     res.redirect('/patients');
   } catch (error) {
     console.error('Error deleting patient:', error);

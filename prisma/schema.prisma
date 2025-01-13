@@ -101,7 +101,7 @@ model Medication {
   prescriptionMedications PrescriptionMedication[]
 }
 
-
+  
 model PrescriptionMedication {
   prescription_id Int
   medication_id   Int

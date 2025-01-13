@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete Patient</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <%- include("./partials/navbar") %>
+
+    <div class="container mx-auto mt-10 px-4">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-red-600">⚠️ Warning: Cannot Delete Patient</h1>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-gray-700 mb-4">
+                    The patient <strong><%= patient.first_name %> <%= patient.last_name %></strong> 
+                    cannot be deleted because they have associated records:
+                </p>
+
+                <ul class="list-disc pl-6 text-gray-600 mb-6">
+                    <% if (relatedRecords.checkups > 0) { %>
+                        <li><%= relatedRecords.checkups %> checkup<%= relatedRecords.checkups === 1 ? '' : 's' %></li>
+                    <% } %>
+                    <% if (relatedRecords.medicalRecords > 0) { %>
+                        <li><%= relatedRecords.medicalRecords %> medical record<%= relatedRecords.medicalRecords === 1 ? '' : 's' %></li>
+                    <% } %>
+                    <% if (relatedRecords.prescriptions > 0) { %>
+                        <li><%= relatedRecords.prescriptions %> prescription<%= relatedRecords.prescriptions === 1 ? '' : 's' %></li>
+                    <% } %>
+                </ul>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <div class="flex">
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                Deleting this patient will also delete all associated records listed above. 
+                                This action cannot be undone.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <a href="/patients/<%= patient.patient_id %>" 
+                   class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition">
+                    Cancel
+                </a>
+
+                <form action="/patients/<%= patient.patient_id %>?_method=DELETE&force=true" 
+                      method="POST" 
+                      onsubmit="return confirm('Are you absolutely sure? This will delete ALL associated records for this patient.');">
+                    <button type="submit" 
+                            class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition">
+                        Delete Everything
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

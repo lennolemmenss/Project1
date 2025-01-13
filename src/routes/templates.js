@@ -6,11 +6,7 @@ const router = express.Router();
 
 // Homepage
 router.get('/', (req, res) => {
-  res.redirect('/dashboard');
-});
-
-router.get('/dashboard', (req, res) => {
-  res.render('dashboard');
+  res.redirect('/patients');
 });
 
 router.get('/medication', (req, res) => {

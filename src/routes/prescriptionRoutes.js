@@ -17,14 +17,16 @@ router.get('/patients/:patientId/prescriptions/new', async (req, res) => {
       return res.status(404).send('Patient not found');
     }
 
-    // Fetch all medications for autocomplete functionality
+    // Fetch all medications and doctors
     const medications = await prisma.medication.findMany();
+    const doctors = await prisma.doctor.findMany();
 
     res.render('create-edit-prescription', {
       action: 'create',
       patient,
       prescription: null,
       medications,
+      doctors, // Add doctors to the template
     });
   } catch (err) {
     console.error(err);
@@ -197,6 +199,7 @@ router.put('/prescriptions/:prescriptionId', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
 // Get prescription for editing
 router.get('/prescriptions/:prescriptionId/edit', async (req, res) => {
   const { prescriptionId } = req.params;
@@ -218,13 +221,15 @@ router.get('/prescriptions/:prescriptionId/edit', async (req, res) => {
       return res.status(404).send('Prescription not found');
     }
 
-    // Fetch all medications for autocomplete
+    // Fetch all medications and doctors
     const medications = await prisma.medication.findMany();
+    const doctors = await prisma.doctor.findMany();
 
     res.render('create-edit-prescription', {
       prescription,
       patient: prescription.patient,
-      medications
+      medications,
+      doctors, // Add doctors to the template
     });
   } catch (err) {
     console.error(err);

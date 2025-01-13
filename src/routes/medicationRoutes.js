@@ -102,8 +102,16 @@ router.delete('/:id', async (req, res) => {
 
     res.redirect('/medication'); // Redirect to the medications list
   } catch (error) {
-    console.error('Error deleting medication:', error);
-    res.status(500).send('Error deleting medication');
+    if (error.code === 'P2003') {
+      // Foreign key constraint violation
+      console.error('Medication is in use and cannot be deleted:', error);
+      res.status(400).send(
+        'This medication cannot be deleted because it is referenced in other records.'
+      );
+    } else {
+      console.error('Error deleting medication:', error);
+      res.status(500).send('Error deleting medication');
+    }
   }
 });
 
