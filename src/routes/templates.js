@@ -32,9 +32,9 @@ router.get('/checkups', (req, res) => {
   res.render('checkups');
 });
 
-// Export Data
+// // Export Data
 router.get('/export', (req, res) => {
-  res.render('export');
+  res.render('export-data');
 });
 
 // Login

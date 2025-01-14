@@ -40,16 +40,19 @@ async function main() {
 
   // Seed Checkup Types
   const checkupTypes = [
-    { type_name: 'General Checkup', description: 'Routine health examination' },
-    { type_name: 'Cardiology Checkup', description: 'Heart-related health examination' },
-    { type_name: 'Dermatology Checkup', description: 'Skin health and issues checkup' },
-    { type_name: 'Neurology Checkup', description: 'Examination related to brain and nervous system' },
-    { type_name: 'Orthopedic Checkup', description: 'Examination of bones, joints, and muscles' },
-    { type_name: 'Gastroenterology Checkup', description: 'Examination of the digestive system' },
-    { type_name: 'Pediatric Checkup', description: 'Routine checkup for children' },
-    { type_name: 'Endocrinology Checkup', description: 'Examination of hormones and metabolism' },
-    { type_name: 'Ophthalmology Checkup', description: 'Eye examination and care' },
-    { type_name: 'Gynecology Checkup', description: 'Women’s reproductive health checkup' }
+    { type_name: 'GP', description: 'General Physical Exam' },
+    { type_name: 'BLOOD', description: 'Blood Test' },
+    { type_name: 'X-RAY', description: 'X-Ray Scan' },
+    { type_name: 'CT', description: 'CT Scan' },
+    { type_name: 'MR', description: 'MRI Scan' },
+    { type_name: 'ULTRA', description: 'Ultrasound' },
+    { type_name: 'ECG', description: 'Electrocardiogram' },
+    { type_name: 'ECHO', description: 'Echocardiogram' },
+    { type_name: 'EYE', description: 'Eye Examination' },
+    { type_name: 'DERM', description: 'Dermatological Examination' },
+    { type_name: 'DENTA', description: 'Dental Checkup' },
+    { type_name: 'MAMMO', description: 'Mammogram' },
+    { type_name: 'NEURO', description: 'Neurological Examination' },
   ];
 
   for (let checkupType of checkupTypes) {
@@ -112,18 +115,18 @@ async function main() {
 
   // Seed Checkup Documents
   const checkupDocuments = [
-    { checkup_id: 1, file_name: 'blood_test_results.pdf', file_path: '/documents/lab/bt001.pdf', file_type: 'PDF' },
-    { checkup_id: 2, file_name: 'ecg_report.pdf', file_path: '/documents/cardio/ecg002.pdf', file_type: 'PDF' },
-    { checkup_id: 3, file_name: 'skin_analysis.jpg', file_path: '/documents/derm/sa003.jpg', file_type: 'IMAGE' },
-    { checkup_id: 4, file_name: 'mri_scan.dcm', file_path: '/documents/neuro/mri004.dcm', file_type: 'DICOM' },
-    { checkup_id: 5, file_name: 'xray_report.pdf', file_path: '/documents/ortho/xr005.pdf', file_type: 'PDF' },
-    { checkup_id: 6, file_name: 'endoscopy_results.pdf', file_path: '/documents/gastro/end006.pdf', file_type: 'PDF' },
-    { checkup_id: 7, file_name: 'growth_chart.pdf', file_path: '/documents/pedia/gc007.pdf', file_type: 'PDF' },
-    { checkup_id: 8, file_name: 'hormone_panel.pdf', file_path: '/documents/endo/hp008.pdf', file_type: 'PDF' },
-    { checkup_id: 9, file_name: 'eye_scan.jpg', file_path: '/documents/opth/es009.jpg', file_type: 'IMAGE' },
-    { checkup_id: 10, file_name: 'ultrasound.dcm', file_path: '/documents/gyn/us010.dcm', file_type: 'DICOM' }
+    { checkup_id: 1, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 2, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 3, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 4, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 5, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 6, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 7, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 8, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 9, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 10 ,file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
   ];
-
+  
   for (let document of checkupDocuments) {
     await prisma.checkupDocument.create({ data: document });
   }

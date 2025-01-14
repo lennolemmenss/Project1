@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Export Data</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    <%- include("./partials/navbar") %>
+
+    
+  <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-semibold text-blue-600">Export Data</h1>
+      <p class="text-gray-600 mt-2">Select the data type to export as a CSV file.</p>
+    </div>
+
+    <!-- Export Options -->
+    <form action="/export/export" method="GET" class="bg-white p-6 rounded-lg shadow-md">
+      <div class="mb-4">
+        <label for="type" class="block text-gray-700 font-medium">Data to Export</label>
+        <select
+          id="type"
+          name="type"
+          class="w-full mt-2 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option value="patients">Patients</option>
+          <option value="medicalRecords">Medical Records</option>
+          <option value="prescriptions">Prescriptions</option>
+          <option value="checkups">Checkups</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-500 transition"
+      >
+        Export Data
+      </button>
+    </form>
+  </div>
+</body>
+
+</html>

@@ -10,8 +10,8 @@ const patientRoutes = require('./routes/patientRoutes');
 const medicalRecordRoutes = require('./routes/medicalRecordRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
 const medicationRoutes = require('./routes/medicationRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes');
 const checkupRoutes = require('./routes/checkupRoutes');
+const exportRoutes = require('./routes/exportRoutes');
 
 const app = express();
 const port = 3000;
@@ -40,7 +40,7 @@ app.use('/uploads', express.static(uploadsPath));
 app.use('/patients', patientRoutes);
 app.use('/medication', medicationRoutes);
 app.use('/checkups', checkupRoutes);
-app.use('/', dashboardRoutes);
+app.use('/export', exportRoutes);
 app.use('/', medicalRecordRoutes);
 app.use('/', prescriptionRoutes);
 app.use('/', templateRoutes);

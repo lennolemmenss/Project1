@@ -27,8 +27,6 @@ router.get('/', async (req, res) => {
       },
     });
 
-    
-
     res.render('checkups', { checkups }); // Pass the checkups data to the view
   } catch (error) {
     console.error('Error fetching checkups:', error);
