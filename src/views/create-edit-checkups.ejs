@@ -73,38 +73,65 @@
           </select>
         </div>
 
-        <!-- File Upload Section for Checkup Document -->
-        <div class="mb-4">
-          <label for="document" class="block text-sm font-medium text-gray-700">Upload Document</label>
-          <input type="file" name="document" id="document" class="block w-full mt-1" />
-
-          <!-- Display Existing Documents -->
-          <% if (checkupDocuments && checkupDocuments.length > 0) { %>
-            <div class="mt-2">
-              <h3 class="text-lg font-semibold">Existing Document:</h3>
-              <ul>
-                <% checkupDocuments.forEach(function(doc) { %>
-                  <li>
+      <!-- File Upload Section for Multiple Documents -->
+      <div class="mb-4">
+        <label for="documents" class="block text-sm font-medium text-gray-700">Upload Documents</label>
+        <input type="file" name="documents" id="documents" multiple 
+               class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm" />
+        
+        <!-- Display Existing Documents -->
+        <% if (checkupDocuments && checkupDocuments.length > 0) { %>
+          <div class="mt-4">
+            <h3 class="text-lg font-semibold">Existing Documents:</h3>
+            <div class="mt-2 space-y-2">
+              <% checkupDocuments.forEach(function(doc) { %>
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded" id="doc-<%= doc.document_id %>">
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" name="documents_to_delete" 
+                           value="<%= doc.document_id %>" 
+                           class="text-blue-600 focus:ring-blue-500" />
                     <a href="<%= doc.file_path %>" class="text-blue-600 hover:underline" target="_blank">
                       <%= doc.file_name %>
                     </a>
-                  </li>
-                <% }); %>
-              </ul>
-              <p class="text-sm text-gray-600 mt-2">Upload a new document to replace the existing one.</p>
+                  </div>
+                  <button type="button" 
+                          onclick="deleteDocument(<%= doc.document_id %>)"
+                          class="text-red-600 hover:text-red-800">
+                    Delete
+                  </button>
+                </div>
+              <% }); %>
             </div>
-          <% } %>
-        </div>
+            <p class="text-sm text-gray-600 mt-2">
+              Check documents to delete them when updating, or use the delete button for immediate removal.
+            </p>
+          </div>
+        <% } %>
+      </div>
 
-
-        <div class="flex justify-end">
-          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-500 transition">
-            <%= checkup ? 'Update Checkup' : 'Create Checkup' %>
-          </button>
-        </div>
-      </form>
-    </div>
+      <div class="flex justify-end">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-500 transition">
+          <%= checkup ? 'Update Checkup' : 'Create Checkup' %>
+        </button>
+      </div>
+    </form>
   </div>
-</body>
+</div>
 
+<script>
+  async function deleteDocument(documentId) {
+    if (confirm('Are you sure you want to delete this document?')) {
+      try {
+        const response = await axios.delete(`/checkups/documents/${documentId}`);
+        if (response.data.success) {
+          document.getElementById(`doc-${documentId}`).remove();
+        }
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        alert('Error deleting document');
+      }
+    }
+  }
+</script>
+</body>
 </html>

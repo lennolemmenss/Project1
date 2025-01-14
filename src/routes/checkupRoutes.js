@@ -122,93 +122,94 @@ router.get('/:id/edit', async (req, res) => {
   }
 });
 
-/// POST create or update a checkup, including document upload
-router.post('/:id?', upload.single('document'), async (req, res) => {
+/// POST create or update a checkup, including multiple document uploads
+router.post('/:id?', upload.array('documents', 10), async (req, res) => {
   const { id } = req.params;
-  const { patient_id, doctor_id, checkup_type_id, checkup_date, notes, status } = req.body;
-  let documentData = null;
+  const { 
+    patient_id, 
+    doctor_id, 
+    checkup_type_id, 
+    checkup_date, 
+    notes, 
+    status,
+    documents_to_delete // Array of document IDs to delete
+  } = req.body;
 
-  if (req.file) {
-    documentData = {
-      file_name: req.file.originalname,
-      file_path: `/uploads/${req.file.filename}`, // Correct path for client access
-      file_type: req.file.mimetype,
-    };
-  }
+  try {
+    // Handle document deletions if specified
+    if (documents_to_delete) {
+      const deleteIds = Array.isArray(documents_to_delete) 
+        ? documents_to_delete.map(Number) 
+        : [Number(documents_to_delete)];
 
-  let updatedCheckup;
-  if (id) {
-    // Update the checkup details
-    updatedCheckup = await prisma.checkup.update({
-      where: { checkup_id: Number(id) },
-      data: {
-        patient_id: Number(patient_id),
-        doctor_id: Number(doctor_id),
-        checkup_type_id: Number(checkup_type_id),
-        checkup_date: new Date(checkup_date),
-        notes,
-        status,
-      },
-    });
-
-    // If a new document is uploaded, replace the old one
-    if (documentData) {
-      // Delete the existing document associated with the checkup
       await prisma.checkupDocument.deleteMany({
+        where: {
+          document_id: {
+            in: deleteIds
+          }
+        }
+      });
+    }
+
+    let checkupData = {
+      patient_id: Number(patient_id),
+      doctor_id: Number(doctor_id),
+      checkup_type_id: Number(checkup_type_id),
+      checkup_date: new Date(checkup_date),
+      notes,
+      status,
+    };
+
+    // Update or create the checkup
+    let updatedCheckup;
+    if (id) {
+      updatedCheckup = await prisma.checkup.update({
         where: { checkup_id: Number(id) },
+        data: checkupData,
       });
-
-      // Save the new document
-      await prisma.checkupDocument.create({
-        data: {
-          checkup_id: Number(id),
-          file_name: documentData.file_name,
-          file_path: documentData.file_path,
-          file_type: documentData.file_type,
-        },
+    } else {
+      updatedCheckup = await prisma.checkup.create({
+        data: checkupData,
       });
     }
-  } else {
-    // Create a new checkup
-    updatedCheckup = await prisma.checkup.create({
-      data: {
-        patient_id: Number(patient_id),
-        doctor_id: Number(doctor_id),
-        checkup_type_id: Number(checkup_type_id),
-        checkup_date: new Date(checkup_date),
-        notes,
-        status,
-      },
-    });
 
-    // Save the new document if uploaded
-    if (documentData) {
-      await prisma.checkupDocument.create({
+    // Handle new document uploads
+    if (req.files && req.files.length > 0) {
+      const documentPromises = req.files.map(file => {
+        return prisma.checkupDocument.create({
           data: {
-              checkup_id: updatedCheckup.checkup_id,
-              file_name: documentData.file_name,
-              file_path: `/uploads/${req.file.filename}`, // Make sure this matches your static route
-              file_type: documentData.file_type,
+            checkup_id: updatedCheckup.checkup_id,
+            file_name: file.originalname,
+            file_path: `/uploads/${file.filename}`,
+            file_type: file.mimetype,
           },
+        });
       });
-    }
-  }
 
-  res.redirect(`/checkups`);
+      await Promise.all(documentPromises);
+    }
+
+    res.redirect(`/checkups/${updatedCheckup.checkup_id}/details`);
+  } catch (error) {
+    console.error('Error processing checkup:', error);
+    res.status(500).send('Error processing checkup');
+  }
 });
 
-// DELETE an existing checkup
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
 
-  await prisma.checkupDocument.deleteMany({
-    where: { checkup_id: Number(id) }
-  });
-
-  await prisma.checkup.delete({
-    where: { checkup_id: Number(id) },
-  });
-  res.redirect('/checkups');
+// DELETE a specific document
+router.delete('/documents/:documentId', async (req, res) => {
+  const { documentId } = req.params;
+  
+  try {
+    await prisma.checkupDocument.delete({
+      where: { document_id: Number(documentId) },
+    });
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting document:', error);
+    res.status(500).json({ success: false, error: 'Error deleting document' });
+  }
 });
 
 module.exports = router;
