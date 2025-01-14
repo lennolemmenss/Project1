@@ -115,16 +115,16 @@ async function main() {
 
   // Seed Checkup Documents
   const checkupDocuments = [
-    { checkup_id: 1, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 2, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 3, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 4, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 5, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 6, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 7, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 8, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 9, file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
-    { checkup_id: 10 ,file_name: 'default_document.jpg', file_path: '/uploads/default_document.jpg', file_type: 'IMAGE' },
+    { checkup_id: 1, file_name: 'default_document.jpg', file_path: '/uploads/default_document1.jpg', file_type: 'IMAGE' },
+    { checkup_id: 2, file_name: 'default_document.jpg', file_path: '/uploads/default_document2.jpg', file_type: 'IMAGE' },
+    { checkup_id: 3, file_name: 'default_document.jpg', file_path: '/uploads/default_document3.jpg', file_type: 'IMAGE' },
+    { checkup_id: 4, file_name: 'default_document.jpg', file_path: '/uploads/default_document4.jpg', file_type: 'IMAGE' },
+    { checkup_id: 5, file_name: 'default_document.jpg', file_path: '/uploads/default_document5.jpg', file_type: 'IMAGE' },
+    { checkup_id: 6, file_name: 'default_document.jpg', file_path: '/uploads/default_document6.jpg', file_type: 'IMAGE' },
+    { checkup_id: 7, file_name: 'default_document.jpg', file_path: '/uploads/default_document7.jpg', file_type: 'IMAGE' },
+    { checkup_id: 8, file_name: 'default_document.jpg', file_path: '/uploads/default_document8.jpg', file_type: 'IMAGE' },
+    { checkup_id: 9, file_name: 'default_document.jpg', file_path: '/uploads/default_document9.jpg', file_type: 'IMAGE' },
+    { checkup_id: 10 ,file_name: 'default_document.jpg', file_path: '/uploads/default_document10.jpg', file_type: 'IMAGE' },
   ];
   
   for (let document of checkupDocuments) {
