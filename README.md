@@ -149,4 +149,14 @@ The Prisma schema defines the structure of the database, including tables and th
 - `src/views/` - Contains EJS templates for rendering HTML pages.
 - `src/uploads/` - Contains uploaded files such as documents and images.
 - `prisma/` - Contains Prisma schema, migration files, and the seeding script.
-- `src/app.js` - The main application file.
+- `src/app.js` - The main application file..
+
+## Application Preview
+
+Once the setup is complete and the application is running successfully, you should see the following interface:
+
+![Application Preview](previews/Application%20preview.png)
+
+## License
+
+This project is licensed under the MIT License.
