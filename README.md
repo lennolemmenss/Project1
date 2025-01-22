@@ -80,6 +80,7 @@ The Prisma schema defines the structure of the database, including tables and th
    }
    ```
 
+
 ## Requirements
 
 - Node.js (v14 or higher)
@@ -149,15 +150,3 @@ The Prisma schema defines the structure of the database, including tables and th
 - `src/uploads/` - Contains uploaded files such as documents and images.
 - `prisma/` - Contains Prisma schema, migration files, and the seeding script.
 - `src/app.js` - The main application file.
-
-## Technologies Used
-
-- **Node.js**: JavaScript runtime built on Chrome's V8 JavaScript engine.
-- **Express**: Web framework for Node.js.
-- **Prisma**: ORM for Node.js and TypeScript.
-- **PostgreSQL**: Relational database management system.
-- **EJS**: Embedded JavaScript templating.
-
-## License
-
-This project is licensed under the MIT License.
