@@ -22,6 +22,11 @@ if (!fs.existsSync(uploadsPath)) {
     fs.mkdirSync(uploadsPath, { recursive: true });
 }
 
+const exportsPath = path.join(__dirname, 'exports');
+if (!fs.existsSync(exportsPath)) {
+    fs.mkdirSync(exportsPath, { recursive: true });
+}
+
 // Middleware
 app.use(cors());
 app.use(express.json());
