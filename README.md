@@ -157,6 +157,3 @@ Once the setup is complete and the application is running successfully, you shou
 
 ![Application Preview](previews/Application%20preview.png)
 
-## License
-
-This project is licensed under the MIT License.
