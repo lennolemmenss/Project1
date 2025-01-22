@@ -91,8 +91,8 @@ The Prisma schema defines the structure of the database, including tables and th
 1. Clone the repository:
 
    ```sh
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/lennolemmenss/Project1.git
+   cd Project1
    ```
 
 2. Install dependencies:
