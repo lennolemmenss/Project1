@@ -20,6 +20,66 @@ The application uses Prisma as an ORM (Object-Relational Mapping) tool to commun
 
 5. **Exporting Data**: The application provides functionality to export patient data to CSV format. This is achieved using the `csv-writer` library, which converts the data retrieved from the database into CSV format.
 
+## Understanding the Prisma Schema
+
+The Prisma schema defines the structure of the database, including tables and their relationships. Here is an overview of how relations work in the Prisma schema:
+
+1. **One-to-Many Relationship**: This is used when one record in a table can be associated with multiple records in another table. For example, a doctor can have multiple patients. In the schema, this is represented using the `@relation` attribute.
+
+   ```prisma
+   model Doctor {
+     id       Int      @id @default(autoincrement())
+     name     String
+     patients Patient[]
+   }
+
+   model Patient {
+     id       Int      @id @default(autoincrement())
+     name     String
+     doctorId Int
+     doctor   Doctor   @relation(fields: [doctorId], references: [id])
+   }
+   ```
+
+2. **Many-to-Many Relationship**: This is used when multiple records in one table can be associated with multiple records in another table. For example, a patient can have multiple checkups, and a checkup can involve multiple patients. This is typically represented using a join table.
+
+   ```prisma
+   model Patient {
+     id       Int       @id @default(autoincrement())
+     name     String
+     checkups Checkup[]
+   }
+
+   model Checkup {
+     id        Int       @id @default(autoincrement())
+     date      DateTime
+     patients  Patient[] @relation(references: [id])
+   }
+   ```
+
+3. **One-to-One Relationship**: This is used when one record in a table is associated with one record in another table. For example, a patient can have one medical record. This is represented using the `@relation` attribute with unique constraints.
+
+   ```prisma
+   model Patient {
+     id            Int           @id @default(autoincrement())
+     name          String
+     medicalRecord MedicalRecord?
+   }
+
+   model MedicalRecord {
+     id        Int     @id @default(autoincrement())
+     details   String
+     patientId Int     @unique
+     patient   Patient @relation(fields: [patientId], references: [id])
+   }
+   ```
+
+## ERD Schema
+
+The following diagram represents the Entity-Relationship Diagram (ERD) for the database schema:
+
+![ERD Schema](previews/erd.svg)
+
 ## Prerequisites
 
 - Node.js (v14 or higher)
