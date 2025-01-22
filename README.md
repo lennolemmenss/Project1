@@ -2,6 +2,24 @@
 
 This is a Node.js application for managing doctors, patients, medical records, checkups, and prescriptions using Prisma and PostgreSQL.
 
+## Project Overview
+
+Design and implement a software solution that incorporates a relational data model which captures the scenario of a medical system responsible for managing patients, their medical records, checkups, and prescriptions. The system should enable doctors to add and edit patients, manage patient’s checkups and medications, and handle additional medical files for specific checkups. Medical records must show the patient’s disease history. Moreover, the solution should provide a way to export patient data to CSV format.
+
+## Communication Between Application and Database
+
+The application uses Prisma as an ORM (Object-Relational Mapping) tool to communicate with the PostgreSQL database. Prisma provides a type-safe query builder and migrations system to manage the database schema and data.
+
+1. **Database Schema**: The database schema is defined in the `prisma/schema.prisma` file. This file contains the definitions of the tables and their relationships.
+
+2. **Migrations**: Prisma migrations are used to apply changes to the database schema. The migrations are stored in the `prisma/migrations` folder and can be applied using the `npx prisma migrate dev` command.
+
+3. **Prisma Client**: The Prisma client is generated using the `npx prisma generate` command. This client provides a type-safe API to interact with the database. The generated client is used in the repository classes to perform CRUD operations.
+
+4. **Seeding Data**: The database can be seeded with initial data using the `prisma/seed.js` script. This script inserts sample data into the database for testing purposes.
+
+5. **Exporting Data**: The application provides functionality to export patient data to CSV format. This is achieved using the `csv-writer` library, which converts the data retrieved from the database into CSV format.
+
 ## Prerequisites
 
 - Node.js (v14 or higher)
