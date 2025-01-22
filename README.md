@@ -6,6 +6,12 @@ This is a Node.js application for managing doctors, patients, medical records, c
 
 Design and implement a software solution that incorporates a relational data model which captures the scenario of a medical system responsible for managing patients, their medical records, checkups, and prescriptions. The system should enable doctors to add and edit patients, manage patient’s checkups and medications, and handle additional medical files for specific checkups. Medical records must show the patient’s disease history. Moreover, the solution should provide a way to export patient data to CSV format.
 
+## ERD Schema
+
+The following diagram represents the Entity-Relationship Diagram (ERD) for the database schema:
+
+![ERD Schema](previews/erd.svg)
+
 ## Communication Between Application and Database
 
 The application uses Prisma as an ORM (Object-Relational Mapping) tool to communicate with the PostgreSQL database. Prisma provides a type-safe query builder and migrations system to manage the database schema and data.
@@ -74,13 +80,8 @@ The Prisma schema defines the structure of the database, including tables and th
    }
    ```
 
-## ERD Schema
 
-The following diagram represents the Entity-Relationship Diagram (ERD) for the database schema:
-
-![ERD Schema](previews/erd.svg)
-
-## Prerequisites
+## Requirements
 
 - Node.js (v14 or higher)
 - PostgreSQL
