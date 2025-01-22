@@ -66,10 +66,11 @@ This is a Node.js application for managing doctors, patients, medical records, c
 
 ## Project Structure
 
-- `routes/` - Contains route handlers for different entities.
-- `repositories/` - Contains repository classes for data access.
-- `views/` - Contains EJS templates for rendering HTML pages.
-- `prisma/` - Contains Prisma schema and migration files.
+- `src/routes/` - Contains route handlers for different entities.
+- `src/views/` - Contains EJS templates for rendering HTML pages.
+- `src/uploads/` - Contains uploaded files such as documents and images.
+- `prisma/` - Contains Prisma schema, migration files, and the seeding script.
+- `src/app.js` - The main application file.
 
 ## License
 
