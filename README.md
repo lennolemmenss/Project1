@@ -124,7 +124,7 @@ The Prisma schema defines the structure of the database, including tables and th
    npx prisma generate
    ```
 
-6. Seed the database (optional):
+6. Seed the database:
 
    ```sh
    node prisma/seed.js
